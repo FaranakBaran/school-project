@@ -1,0 +1,20 @@
+<div class="login-staff">
+    <form [formGroup]="loginStaffFg">
+        <h2>Login School Staff</h2>
+        <mat-form-field appearance="outline">
+            <mat-label>Personal Code</mat-label>
+            <input type="text" formControlName="personalCode" placeholder="Enter your Personal Code" matInput>
+            <mat-hint>10 digits only.</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>PassWord</mat-label>
+            <input type="text" formControlName="passWord" placeholder="Enter your PassWord" matInput>
+            <mat-hint>10 digits only.</mat-hint>
+        </mat-form-field>
+
+        <button type="submit" (click)="loginStaff()" [disabled]="loginStaffFg.invalid" mat-raised-button color="primary">
+            Register
+        </button>
+        <button (click)="clearForm()" [disabled]="loginStaffFg.pristine" mat-raised-button color="warn">Clear</button>
+    </form>
+</div>

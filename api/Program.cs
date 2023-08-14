@@ -4,7 +4,6 @@ using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 #region MongoDbSettings
 ///// get values from this file: appsettings.Development.json /////
 // get section
@@ -28,6 +27,14 @@ builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
 
 #endregion MongoDbSettings
 
+#region Cors: baraye ta'eede Angular HttpClient requests
+builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+            policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
+    });
+#endregion Cors
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -45,6 +52,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 

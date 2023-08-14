@@ -1,0 +1,177 @@
+$w_color: #fff;
+$wd_color: #E0E0E0;
+//$font-family: 'Roboto Mono',
+//monospace;
+$background_1: #B3E5FC;
+$background_2: #64B5F6;
+$background_3: #42A5F5;
+$background_4: #1976D2;
+
+* {
+    margin: 0;
+    padding: 0;
+    //box-sizing: border-box;
+    display: flex;
+}
+
+body {
+    //font-family: $font-family;
+    height: 100vh;
+    display: flex;
+}
+
+.header-container {
+    background-color: $background_1;
+    //width: 100%;
+    //height: fit-content;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    //justify-content: space-between;
+
+    .site-nav {
+        //flex: 1;
+        display: flex;
+
+        span {
+            display: flex;
+            align-items: center;
+        }
+
+        .openav {
+            cursor: pointer;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: $background_2;
+            overflow-x: hidden;
+            padding-top: 60px;
+            transition: 0.5s;
+
+            .accordion {
+                font-family: $font-family;
+                background-color: $background_3;
+                color: $w_color;
+                cursor: pointer;
+                padding: 18px;
+                width: 100%;
+                text-align: left;
+                border: none;
+                outline: none;
+                transition: 0.4s;
+            }
+
+            .panel {
+                background-color: $background_4;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                margin-bottom: 10px;
+
+                a {
+                    padding: 8px 8px 8px 32px;
+                    text-decoration: none;
+                    font-size: 15px;
+                    color: $wd_color;
+                    display: block;
+                    transition: 0.3s;
+
+                    &:hover {
+                        color: $w_color;
+                    }
+                }
+            }
+
+            .closebtn {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 15px;
+                color: $wd_color;
+                display: block;
+                transition: 0.3s;
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }
+        }
+    }
+
+
+    .site-logo {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+
+        .image-base {
+            .inner-base {
+                width: 60px;
+                height: 60px;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+}
+
+.main-site {
+    padding: 0 20px;
+    margin-top: 30px;
+    text-align: center;
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .body-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+
+        .image-bx {
+            margin: 0 20px;
+
+            .inner-image-box {
+                width: 300px;
+                height: 300px;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 10px;
+                }
+            }
+        }
+    }
+
+    .paragraf :first-child{
+        font-size: 4rem;
+        text-align: justify;
+        padding: 30px;
+        overflow: auto;
+
+    }
+}
+
+.site-footer {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    background-color: $background_1;
+    padding: 20px;
+    margin-top: 30px;
+}

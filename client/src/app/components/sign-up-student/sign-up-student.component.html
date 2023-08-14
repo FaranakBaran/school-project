@@ -1,0 +1,48 @@
+<form [formGroup]="studentFg">
+    <h2>Register a Student</h2>
+    <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input type="text" formControlName="firstName" placeholder="Enter your Name" matInput>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Last name</mat-label>
+        <input type="text" formControlName="lastName" matInput>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Age</mat-label>
+        <input type="number" formControlName="age" matInput>
+        <mat-error>This field is required</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>National Code</mat-label>
+        <input type="text" formControlName="nationalCode" placeholder="Enter you code" matInput>
+        <mat-hint>10 digits only.</mat-hint>
+        <mat-error *ngIf="NationalCodeCtrl.dirty">This field is required.</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Name Pedar</mat-label>
+        <input type="text" formControlName="namePedar" placeholder="Enter your father Name" matInput>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>PassWord</mat-label>
+        <input type="text" formControlName="PassWord" placeholder="Enter your PassWord" matInput>
+        <mat-hint>8 digits only.</mat-hint>
+        <mat-error *ngIf="PassWord.dirty">This field is required.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>PayeTahsili</mat-label>
+        <mat-select formControlName="payeTahsili">
+            <mat-option *ngFor="let paye of payetahsili" [value]="paye">
+                {{paye}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button type="submit" (click)="registerStudent()" [disabled]="studentFg.invalid" mat-raised-button color="primary">
+        Register
+    </button>
+    <button (click)="ClearForm()" [disabled]="studentFg.pristine" mat-raised-button color="warn">Clear</button>
+</form>
+   
+   
+   <h2>{{studentFg.value | json}}</h2>>

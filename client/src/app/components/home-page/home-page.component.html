@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="stylesheet" href="home-page.component.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <nav class="site-nav">
+                <span onclick="openNav()" class="openav">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 7H21" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" />
+                        <path d="M9.49023 12H21.0002" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" />
+                        <path d="M3 12H5.99" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" />
+                        <path d="M3 17H21" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </span>
+                <div class="sidenav">
+                    <div id="webSide" class="sidenav">
+                        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                        <button class="accordion">Sign In</button>
+                        <div class="panel">
+                            <a href="#">Sign In School Staff</a>
+                            <a href="#">Sign In School Students</a>
+                        </div>
+                        <button class="accordion">Login</button>
+                        <div class="panel">
+                            <a href="#">Login In School Staff</a>
+                            <a href="#">Login In School Students</a>
+                        </div>
+                        <button class="accordion">Admin</button>
+                        <div class="panel">
+                            <a href="#">Login</a>
+                            <a href="#">Sign</a>
+                        </div>
+                        <button class="accordion">Lists</button>
+                        <div class="panel">
+                            <a href="#">Lists Of School Staff</a>
+                            <a href="#">Lists Of School Students</a>
+                            <a href="#">Lists Of Class</a>
+                            <a href="#">Lists Of Academic</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="header-title">
+                <h2>Welcome to Keshvari school page</h2>
+            </div>
+            <div class="site-logo">
+                <div class="image-base">
+                    <div class="inner-base">
+                        <img src="logo.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main-site">
+        <h1>Dear users, please refer to the menu to view your grades and report card.</h1>
+        <section class="body-image">
+            <div class="image-bx">
+                <div class="inner-image-box">
+                    <img src="1.jpg" alt="">
+                </div>
+            </div>
+            <div class="image-bx">
+                <div class="inner-image-box">
+                    <img src="2.jpg" alt="">
+                </div>
+            </div>
+            <div class="image-bx">
+                <div class="inner-image-box">
+                    <img src="3.jpg" alt="">
+                </div>
+            </div>
+        </section>
+        <div class="paragraf">
+            <p>
+                Keshavari School was established in 2010, located in Jahanshahr, Molana Blvd.
+            </p>
+        </div>
+    </main>
+    <footer class="site-footer">
+        "The content of this website is protected by copyright. Any unauthorized use or reproduction of the materials on
+        this site is prohibited."
+        <br> contact us
+        <br>Address: Karaj Jahanshahr, Maulana Blvd
+        <br>phone number: 02634******
+    </footer>
+    <script>
+        function openNav() {
+            document.getElementById("webSide").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("webSide").style.width = "0";
+        }
+
+        let acc = document.getElementsByClassName("accordion");
+        let i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

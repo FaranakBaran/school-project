@@ -1,0 +1,58 @@
+<form [formGroup]="schoolStaffFg">
+    <h2>Register a Student</h2>
+    <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input type="text" formControlName="firstName" placeholder="Enter your Name" matInput>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Last name</mat-label>
+        <input type="text" formControlName="lastName" matInput>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Age</mat-label>
+        <input type="number" formControlName="age" matInput>
+        <mat-error>This field is required</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>National Code</mat-label>
+        <input type="text" formControlName="nationalCode" placeholder="Enter you code" matInput>
+        <mat-hint>10 digits only.</mat-hint>
+        <mat-error *ngIf="NationalCodeCtrl.dirty">This field is required.</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Personal Code</mat-label>
+        <input type="text" formControlName="personalCode" placeholder="Enter your Personal Code" matInput>
+        <mat-hint>8 digits only.</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>PassWord</mat-label>
+        <input type="text" formControlName="PassWord" placeholder="Enter your PassWord" matInput>
+        <mat-hint>8 digits only.</mat-hint>
+        <mat-error *ngIf="PassWordCtrl.dirty">This field is required.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Education</mat-label>
+        <mat-select formControlName="educations">
+            <mat-option *ngFor="let edu of educations" [value]="edu">
+                {{edu}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Job Title</mat-label>
+        <mat-select formControlName="jobeTitle">
+            <mat-option *ngFor="let job of jobTitle" [value]="job">
+                {{job}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button type="submit" (click)="signInSchoolStaff()" [disabled]="schoolStaffFg.invalid" mat-raised-button
+        color="primary">
+        Register
+    </button>
+    <button (click)="ClearForm()" [disabled]="schoolStaffFg.pristine" mat-raised-button color="warn">Clear</button>
+</form>
+
+
+<h2>{{schoolStaffFg.value | json}}</h2>>
