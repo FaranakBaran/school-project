@@ -21,6 +21,7 @@ body {
     display: flex;
     overflow: auto;
     font-size: 1rem;
+    min-height: 2rem;
 }
 
 .header-container {
@@ -42,6 +43,7 @@ body {
 
 .header-container .site-nav .openav {
     cursor: pointer;
+    flex: 1 1 auto;
 }
 
 .header-container .site-nav .sidenav {
