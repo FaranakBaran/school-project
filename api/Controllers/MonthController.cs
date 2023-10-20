@@ -1,46 +1,33 @@
-using api.Models;
-using api.Settings;
-using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
-using MongoDB.Bson;
-
 namespace api.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class MonthController : ControllerBase
+public class MonthRepository : BaseApiController
 {
-    private readonly IMongoCollection<Month> _collection;
+    private readonly IMonthRepository _monthRepository;
 
-    public MonthController(IMongoClient client, IMongoDbSettings dbSettings)
+    public MonthController(IMonthRepository monthRepository)
     {
-        var dbName = client.GetDatabase(dbSettings.DatabaseName);
-        _collection = dbName.GetCollection<Student>("students");
+        _monthRepository = monthRepository;
+
+        //token Service
     }
 
     [HttpPost("save")]
-    public ActionResult<Month> Create(Month monthIn)
+    public async Task<ActionResult<MonthDto>> Register(RegisterDto monthInput, CancellationToken cancellationToken)
     {
-        Month month = new Month(
-            Id: null,
-            academicMonths: monthIn.academicMonths.Trim()
-        );
+        if (monthDto is null)
+            return BadRequest("This month has already arrived.")
 
-        _collection.InsertOne(month);
-
-        return month;
+        return monthDto;
     }
 
     [HttpGet("get-all-month")]
-    public ActionReasult<IEnumerable<Month>> GetAll()
+    public async Task<ActionReasult<IEnumerable<MonthDto>>> GetAll(CancellationToken cancellationToken)
     {
-        List<Month> months = _collection.Find<Month>(new BsonDocument()).ToList();
+        List<MonthDto> monthDtos = await _monthRepository.GetAllAsync(cancellationToken);
 
-        if (!months.Any())
+        if (!monthDtos.Any())
             return NoContent();
 
-        return months;
+        return monthsDtos;
     }
 }
-
-

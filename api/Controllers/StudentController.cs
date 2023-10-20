@@ -1,88 +1,72 @@
-using api.Models;
-using api.Settings;
-using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
-using MongoDB.Bson;
-
 namespace api.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class StudentController : ControllerBase
+public class StudentController : BaseApiController
 {
-    private readonly IMongoCollection<Student> _collection;
+    private readonly IStudentRepository _studentRepository;
 
-    public StudentController(IMongoClient client, IMongoDbSettings dbSettings)
+    public StudentController(IStudentRepository studentRepository)
     {
-        var dbName = client.GetDatabase(dbSettings.DatabaseName);
-        _collection = dbName.GetCollection<Student>("students");
+        _studentRepository = studentRepository;
+
+        //token Service
     }
-
+    
     [HttpPost("register")]
-    public ActionResult<Student> Create(Student studentIn)
+    public async Task<ActionResult<StudentDto>> Register(RegisterDto studentInput, CancellationToken cancellationToken)
     {
-        Student student = new Student(
-            Id: null,
-            NationalCode: studentIn.NationalCode.Trim(),
-            FirstName: studentIn.FirstName.Trim(),
-            LastName: studentIn.LastName.Trim(),
-            Age: studentIn.Age,
-            PassWord: studentIn.PassWord,
-            Payetahsili: studentIn.Payetahsili.Trim(),
-            NamePedar: studentIn.NamePedar.Trim()
-        );
+        if (studentDto is null)
+            return BadRequest("National code is taken.")
 
-        _collection.InsertOne(student);
-
-        return student;
+        return studentDto;
     }
 
     [HttpPost("login")]
-    public ActionResult<Student> Login(Student studentIn)
+    public async Task<ActionResult<StudentDto>> Login(LoginDto studentIn, CancellationToken cancellationToken)
     {
-        Student Student = _collection.Find<Student>(doc => doc.NationalCode == studentIn.NationalCode && doc.PassWord == studentIn.PassWord).FirstOrDefault();
+        StudentDto? studentDto = await _studentRepository.LoginAsync(studentInput, cancellationToken);
 
-        if (Student is null)
-            return BadRequest("This user does not exist.");
+        if (studentDto is null)
+            return Unauthorized("Wrong National Code or Password.")
 
-        return Student;
+        return studentDto;
     }
 
     [HttpGet("get-all-students")]
-    public ActionResult<IEnumerable<Student>> GetAll()
+    public async Task<ActionResult<IEnumerable<StudentDto>>> GetAll(CancellationToken cancellationToken)
     {
-        List<Student> students = _collection.Find<Student>(new BsonDocument()).ToList();
+        List<StudentDto> studentDtos = await _studentRepository.GetAllAsync(cancellationToken);
 
-        if (!students.Any())
+        if (!studentDtos.Any())
             return NoContent();
 
-        return students;
+        return studentDtos;
     }
 
     [HttpGet("get-student-by-nationalCode")]
-    public ActionResult<IEnumerable<Student>> GetStudents(string nationalCode)
+    public async Task<ActionResult<Student>> GetStudentsByNationalCode(string studentNtionalCode, CancellationToken cancellationToken)
     {
-        List<Student> students = _collection.Find(Student => Student.NationalCode == nationalCode).ToList();
+        Student student = await _collection.Find<Student>(stu => stu.NationalCode == stuNationalCode).FirstOrDefaultAsync(cancellationToken);
 
-        if (!students.Any())
-            return NoContent();
+        if (student is null)
+            return NotFound("No user was found");
 
-        return students;
+        return student;
+        //return null;
     }
 
     [HttpPut("update/{nationalCode}")]
-    public ActionResult<UpdateResult> UpdateStudentByNationalCod(string nationalCode, Student studentIn)
+    public  async Task<ActionResult<UpdateResult>> UpdateStudentByNationalCod(string studentNationalCode, CancellationToken cancellationToken)
     {
-        var UpdateStudent = Builders<Student>.Update
-        .Set(doc => doc.PassWord, studentIn.PassWord)
-        .Set(doc => doc.Payetahsili, studentIn.Payetahsili);
+        //var UpdateStudent = Builders<Student>.Update
+        //.Set(doc => doc.PassWord, studentIn.PassWord)
+        //.Set(doc => doc.Payetahsili, studentIn.Payetahsili);
 
-        return _collection.UpdateOne<Student>(doc => doc.NationalCode == nationalCode, UpdateStudent);
+        //return _collection.UpdateOne<Student>(doc => doc.NationalCode == nationalCode, UpdateStudent);
     }
 
     [HttpDelete("delete/{nationalCode}")]
-    public ActionResult<DeleteResult> Delete(string nationalCode)
+    public  async Task<ActionResult<DeleteResult>> Delete(string nationalCode, CancellationToken cancellationToken)
     {
-        return _collection.DeleteOne<Student>(doc => doc.NationalCode == nationalCode);
+        //return _collection.DeleteOne<Student>(doc => doc.NationalCode == nationalCode);
     }
 }

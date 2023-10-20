@@ -1,90 +1,69 @@
-using api.Models;
-using api.Settings;
-using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
-using MongoDB.Bson;
-
 namespace api.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class StaffController : ControllerBase
+public class StaffController : BaseApiController
 {
-    private readonly IMongoCollection<Staff> _collection;
+    private readonly IStaffRepository _staffRepository;
 
-    public StaffController(IMongoClient client, IMongoDbSettings dbSettings)
+    public StaffController(IStaffRepository staffRepository)
     {
-        var dbName = client.GetDatabase(dbSettings.DatabaseName);
-        _collection = dbName.GetCollection<Staff>("staffs");
-
+       _staffRepository = staffRepository;
     }
 
     [HttpPost("register")]
-    public ActionResult<Staff> Create(Staff staffIn)
+    public async Task<ActionResult<StaffDto>> Register(Register staffInput, CancellationToken cancellationToken)
     {
-        Staff staff = new Staff(
-            Id: null,
-            NationalCode: staffIn.NationalCode.Trim(),
-            FirstName: staffIn.FirstName.Trim(),
-            LastName: staffIn.LastName.Trim(),
-            Age: staffIn.Age,
-            PassWord: staffIn.PassWord,
-            PersonnelCode: staffIn.PersonnelCode.Trim(),
-            Education: staffIn.Education.Trim(),
-            JobTitle: staffIn.JobTitle.Trim()
-        );
+        if (staffDto is null)
+            return BadRequest("Personal Code is taken.")
 
-        _collection.InsertOne(staff);
-
-        return staff;
+        return studentDto;
     }
 
     [HttpPost("login")]
-    public ActionResult<Staff> Login(Staff staffIn)
+    public async Task<ActionResult<StaffDto>> Login(LoginDto staffInput, CancellationToken cancellationToken)
     {
-        Staff Staff = _collection.Find<Staff>(doc => doc.PersonnelCode == staffIn.PersonnelCode && doc.NationalCode == staffIn.NationalCode).FirstOrDefault();
+        StaffDto? staffDto = await _staffRepository.LoginAsync(staffInput, cancellationToken);
 
-        if (Staff is null)
-            return BadRequest("This user does not exist.");
+        if (staffDto is null)
+            return Unauthorized("Wrong Personal Code or Password.")
 
-        return Staff;
+        return staffDto;
     }
 
     [HttpGet("get-all-staffs")]
-    public ActionResult<IEnumerable<Staff>> GetAll()
+    public async Task<ActionResult<IEnumerable<StaffDto>>> GetAll(CancellationToken cancellationToken)
     {
-        List<Staff> staffs = _collection.Find<Staff>(new BsonDocument()).ToList();
+        List<StaffDto> staffDtos = await _staffRepository.GetAllAsync(cancellationToken);
 
-        if (!staffs.Any())
+        if (!staffDtos.Any())
             return NoContent();
 
-        return staffs;
+        return staffDtos;
     }
 
     [HttpGet("get-by-personalCode")]
-    public ActionResult<IEnumerable<Staff>> GetStaffs(string personalCode)
+    public async Task<ActionResult<Staff>> GetStaffsByPersonalCode(string staffPersonalCode, CancellationToken cancellationToken)
     {
-        List<Staff> staffs = _collection.Find(Staff => Staff.PersonnelCode == personalCode).ToList();
+        Staff staff = await _collection.Find<Staff>(staff => staff.PersonnelCode == staffPersonalCode).FirstOrDefaultAsync(cancellationToken);
 
-        if (!staffs.Any())
-            return NoContent();
+        if (staff is null)
+            return NotFound("No user was found");
 
         return staffs;
     }
 
     [HttpPut("update/{personalCode}")]
-    public ActionResult<UpdateResult> UpdateStaffByPersonalCode(string personalCode, Staff staffIn)
+    public async Task<ActionResult<UpdateResult>> UpdateStaffByPersonalCode(string staffPersonalCode, CancellationToken cancellationToken)
     {
-        var UpdateStaff = Builders<Staff>.Update
-        .Set(doc => doc.PassWord, staffIn.PassWord)
-        .Set(doc => doc.Education, staffIn.Education);
+        //var UpdateStaff = Builders<Staff>.Update
+        //.Set(doc => doc.PassWord, staffIn.PassWord)
+        //.Set(doc => doc.Education, staffIn.Education);
 
-        return _collection.UpdateOne<Staff>(doc => doc.PersonnelCode == personalCode, UpdateStaff);
+        //return _collection.UpdateOne<Staff>(doc => doc.PersonnelCode == personalCode, UpdateStaff);
     }
 
     [HttpDelete("delete/{personalCode}")]
-    public ActionResult<DeleteResult> Delete(string personalCode)
+    public async Task<ActionResult<DeleteResult>> Delete(string personalCode, CancellationToken cancellationToken)
     {
-        return _collection.DeleteOne<Staff>(doc => doc.PersonnelCode == personalCode);
+       // return _collection.DeleteOne<Staff>(doc => doc.PersonnelCode == personalCode);
     }
 }

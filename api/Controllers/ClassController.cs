@@ -1,47 +1,32 @@
-using api.Models;
-using api.Settings;
-using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
-using MongoDB.Bson;
-
 namespace api.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class ClassController : ControllerBase
+public class ClassRepository : BaseApiController
 {
-    private readonly IMongoCollection<Class> _collection;
+    private readonly IClassRepository _calssRepository;
 
-    public MonthController(IMongoClient client, IMongoDbSettings dbSettings)
+    public ClassController(IClassRepository classRepository)
     {
-        var dbName = client.GetDatabase(dbSettings.DatabaseName);
-        _collection = dbName.GetCollection<Student>("classes");
+        _calssRepository = monthRepository;
     }
 
     [HttpPost("save")]
 
-    public ActionResult<Class> Create(Class classIn)
+    public async Task<ActionResult<ClassDto>> Register(RegisterDto classInput)
     {
-        Class schoolClass = new Class(
-            Id: null,
-            schoolClass: classIn.schoolClass.Trim()
-        );
+        if (classsDto is null)
+            return BadRequest("This class has already arrived.")
 
-        _collection.InsertOne(schoolClass);
-
-        return schoolClass;
+        return classDto;
     }
 
     [HttpGet("get-all-class")]
-    public ActionReasult<IEnumerable<Class>> GetAll()
+    public async Task<ActionReasult<IEnumerable<ClassDto>>> GetAll(CancellationToken cancellationToken)
     {
-        List<Class> classes = _collection.Find<Class>(new BsonDocument()).ToList();
+        List<ClassDto> calssDto = await _calssRepository.GetAllAsync(cancellationToken);
 
-        if (!classes.Any())
-            return NoContent();
+        if (!calssDtos.Any())
+            return NoContant();
 
-        return classes;
+        return calssDtos;
     }
 }
-
-

@@ -5,9 +5,7 @@ using MongoDB.Driver;
 
 namespace api.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class AdminController : ControllerBase
+public class AdminController : BaseApiController
 {
     private readonly IMongoCollection<Admin> _collection;
     public AdminController(IMongoClient client, IMongoDbSettings dbSettings)
